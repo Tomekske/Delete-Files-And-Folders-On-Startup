@@ -1,5 +1,14 @@
 import os
 import pathlib
+import json
+from dataclasses import dataclass
+
+@dataclass
+class Config:
+    '''POCO class for config data'''
+    
+    Directories: str = ""
+    Whitelist: str = ""
 
 def DirectoryItems(directories, whitelist):
     '''List all the directories and files within a specified path
@@ -7,6 +16,8 @@ def DirectoryItems(directories, whitelist):
     Args:
         directories (list): List all the items from specified directories
         whitelist (list): Whitelist of all the extensions
+    Returns:
+        (list): List of all directory items
     '''
 
     directoryItems = []
@@ -22,7 +33,8 @@ def DirectoryItems(directories, whitelist):
                     directoryItems.append(pathToFile)
     return directoryItems
 
-directories = ["C:\\Users\\joost\\Downloads","D:\\tmp"]
-whitelist = [".txt"]
+with open('config.json') as f:
+    data = json.load(f)
+    config = Config(data['Directories'],data['Whitelist'])
 
-dirItems = DirectoryItems(directories,whitelist)
+dirItems = DirectoryItems(config.Directories,config.Whitelist)
