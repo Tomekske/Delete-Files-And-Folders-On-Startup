@@ -2,6 +2,7 @@ import os
 import pathlib
 import json
 from dataclasses import dataclass
+import logging
 
 @dataclass
 class Config:
@@ -10,6 +11,7 @@ class Config:
     Directories: str = ""
     Whitelist: str = ""
     Folders: bool = False
+    Logging: str = ""
 
 def DirectoryItems(directories, whitelist, folders):
     '''List all the directories and files within a specified path
@@ -24,6 +26,9 @@ def DirectoryItems(directories, whitelist, folders):
 
     directoryItems = []
 
+    # logging configuration
+    logging.basicConfig(level=logging.INFO,filename=config.Logging, filemode='a', format='[%(asctime)s] - [%(levelname)s] - %(message)s', datefmt='%d-%m-%y %H:%M:%S')
+
     # Loop-over all the directories
     for directory in directories:
         # Loop-over all the items within a directory
@@ -36,15 +41,20 @@ def DirectoryItems(directories, whitelist, folders):
                 # Check if item is a folder
                 if os.path.isdir(pathToItem):
                     directoryItems.append(pathToItem)
+                    logging.info(f'[DIR]  - [{pathToItem}]')
             # Loop-over all the whitelisted extensions
             for white in whitelist:
                 if item.endswith(white):
                     directoryItems.append(pathToItem)
-                    
+                    logging.info(f'[FILE] - [{pathToItem}]')
+
     return directoryItems
 
 with open('config.json') as f:
+    # Load data from file
     data = json.load(f)
-    config = Config(data['Directories'],data['Whitelist'],data['Folders'])
+
+    # Prepare config object
+    config = Config(data['Directories'],data['Whitelist'],data['Folders'], data["Logging"])
 
 dirItems = DirectoryItems(config.Directories,config.Whitelist, config.Folders)
