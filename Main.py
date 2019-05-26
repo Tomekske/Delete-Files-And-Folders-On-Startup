@@ -3,6 +3,7 @@ import pathlib
 import json
 from dataclasses import dataclass
 import logging
+import shutil
 
 @dataclass
 class Config:
@@ -15,7 +16,7 @@ class Config:
 
 def DirectoryItems(directories, whitelist, folders):
     '''List all the directories and files within a specified path
-    
+
     Args:
         directories (list): List all the items from specified directories
         whitelist (list): Whitelist of all the extensions
@@ -41,12 +42,23 @@ def DirectoryItems(directories, whitelist, folders):
                 # Check if item is a folder
                 if os.path.isdir(pathToItem):
                     directoryItems.append(pathToItem)
-                    logging.info(f'[DIR]  - [{pathToItem}]')
+
+                    try:
+                        shutil.rmtree(pathToItem)
+                        logging.info(f'[DIR]  - [{pathToItem}]')
+                    except OSError as error:
+                        logging.info(f'[{error}]')
+
             # Loop-over all the whitelisted extensions
             for white in whitelist:
                 if item.endswith(white):
                     directoryItems.append(pathToItem)
-                    logging.info(f'[FILE] - [{pathToItem}]')
+
+                    try:
+                        os.unlink(pathToItem)
+                        logging.info(f'[FILE] - [{pathToItem}]')
+                    except OSError as error:
+                        logging.info(f'[{error}]')
 
     return directoryItems
 
