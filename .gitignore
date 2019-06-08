@@ -1,2 +1,6 @@
 *.log
 config.json
+**/__pychache__
+**/*.pyc
+**/.vscode
+.vscode/launch.json
