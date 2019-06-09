@@ -1,0 +1,14 @@
+{
+    "Directories": [
+        "<C:\\path\\to\\directory_1>",
+        "<C:\\path\\to\\directory_2>"
+    ],
+    "Whitelist": [
+        ".<extension_1>",
+        ".<extension_2>",
+        ".<extension_3>",
+        ".<extension_4>"
+    ],
+    "Folders" : true,
+    "Logging" : "<C:/path/to/logfile.log>"
+}
