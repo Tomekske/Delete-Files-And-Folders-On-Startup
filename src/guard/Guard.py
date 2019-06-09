@@ -23,17 +23,20 @@ class Guard:
         return True
     
     @staticmethod
-    def PathExist(filename, path):
+    def PathExist(path, filename=None):
         '''Check whether a path exists
         
         Args:
             filename (string): The name of the logfile
             path (string): Path to the item
         '''
-        
+
         # Check whether the path the file or directory exists
         if not os.path.exists(path):
             exception = f"Path - '{path}' does not exist"
-            logger.Message.Error(filename, exception)
-            raise Exception(exception)
+
+            # Check whether logfile name is not none
+            if filename is not None:
+                logger.Message.Error(filename, exception)
+            raise(exception)
         return True

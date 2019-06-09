@@ -13,11 +13,14 @@ class Directory:
             directory (list): List of all directories to scan for items to delete
             config (Config): Config object containing configuration file information
         '''
-        # Check whether config value is empty
-        # grd.Guard.IsNotEmpty(filename,"white", whitelist)
 
         self.directory = directory
         self.config = config
+
+        # Check whether path exists
+        grd.Guard.PathExist(self.config.Logging)
+        # Check whether config value is empty
+        grd.Guard.IsNotEmpty(self.config.Logging,"whitelist", self.config.Whitelist)
 
     def DeleteItems(self):
         '''Delete a folder item'''
@@ -28,7 +31,7 @@ class Directory:
             path = self.__AbsolutePath(item)
 
             # Check whether file exists
-            grd.Guard.PathExist(self.config.Logging, path)
+            grd.Guard.PathExist(path, self.config.Logging)
 
             # Check if whitelisted items should be deleted
             self.__WhitelistItems(path)
